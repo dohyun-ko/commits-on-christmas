@@ -98,10 +98,10 @@ export async function GET(request: Request): Promise<Response> {
       },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
     return NextResponse.json(
-      { error: error.message || "Internal Server Error" },
+      { error: error || "Internal Server Error" },
       { status: 500 }
     );
   }
