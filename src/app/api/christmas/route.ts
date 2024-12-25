@@ -22,15 +22,17 @@ query($username: String!, $fromDate: DateTime!, $toDate: DateTime!) {
 }
 `;
 
+interface ContributionDay {
+  date: string;
+  contributionCount: number;
+}
+
 interface GraphQLResponse {
   user: {
     contributionsCollection: {
       contributionCalendar: {
         weeks: {
-          contributionDays: {
-            date: string;
-            contributionCount: number;
-          }[];
+          contributionDays: ContributionDay[];
         }[];
       };
     };
@@ -51,34 +53,49 @@ export async function GET(request: Request): Promise<Response> {
   try {
     const currentYear = new Date().getFullYear();
     const startYear = 2010; // Adjust this to the earliest year you want to fetch commits for
-    let contributions: { date: string; contributionCount: number }[] = [];
 
-    // Loop through each year and fetch Christmas commits
-    for (let year = startYear; year <= currentYear; year++) {
-      const fromDate = new Date(`${year}-12-25T00:00:00Z`).toISOString();
-      const toDate = new Date(`${year}-12-26T00:00:00Z`).toISOString();
+    // Generate date ranges for all Christmas days
+    const christmasRanges = Array.from(
+      { length: currentYear - startYear + 1 },
+      (_, i) => {
+        const year = startYear + i;
+        return {
+          fromDate: new Date(`${year}-12-25T00:00:00Z`).toISOString(),
+          toDate: new Date(`${year}-12-26T00:00:00Z`).toISOString(),
+        };
+      }
+    );
 
-      const graphqlResponse: GraphQLResponse = await octokit.graphql(query, {
-        username,
-        fromDate,
-        toDate,
-      });
+    // Fetch data for all years in parallel using Promise.all
+    const results = await Promise.all(
+      christmasRanges.map(async (range) => {
+        const graphqlResponse: GraphQLResponse = await octokit.graphql(query, {
+          username,
+          fromDate: range.fromDate,
+          toDate: range.toDate,
+        });
 
-      // Extract contribution days from the GraphQL response
-      const days =
-        graphqlResponse.user.contributionsCollection.contributionCalendar.weeks
-          .flatMap((week) => week.contributionDays)
-          .filter((day) => day.date.startsWith(`${year}-12-25`)); // Only include Christmas Day
+        // Extract the Christmas Day contribution
+        const christmasDay =
+          graphqlResponse.user.contributionsCollection.contributionCalendar.weeks
+            .flatMap((week) => week.contributionDays)
+            .find((day) => day.date === range.fromDate.split("T")[0]); // Ensure we match Christmas day only
 
-      contributions = contributions.concat(days);
-    }
+        return (
+          christmasDay || {
+            date: range.fromDate.split("T")[0],
+            contributionCount: 0,
+          }
+        ); // Default to 0 if no data
+      })
+    );
 
     // Calculate the current streak
-    let streak = 0;
-    const sortedContributions = contributions.sort(
+    const sortedContributions = results.sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
+    let streak = 0;
     for (const day of sortedContributions) {
       if (day.contributionCount > 0) {
         streak++;
@@ -89,19 +106,19 @@ export async function GET(request: Request): Promise<Response> {
 
     return NextResponse.json(
       {
-        totalContributions: contributions.reduce(
+        totalContributions: results.reduce(
           (sum, day) => sum + day.contributionCount,
           0
         ),
         streak,
-        contributions,
+        contributions: sortedContributions,
       },
       { status: 200 }
     );
   } catch (error: unknown) {
     console.error(error);
     return NextResponse.json(
-      { error: error || "Internal Server Error" },
+      { error: (error as Error).message || "Internal Server Error" },
       { status: 500 }
     );
   }
