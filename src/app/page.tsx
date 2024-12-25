@@ -51,7 +51,7 @@ export default function Home() {
             </h1>
 
             <p className="text-center text-white font-extralight text-lg">
-              Proof your commitment to open source
+              Prove your commitment to open source
             </p>
 
             <div className="flex flex-col gap-3 text-xl mt-5">
