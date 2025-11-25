@@ -51,12 +51,17 @@ export async function GET(request: Request): Promise<Response> {
   }
 
   try {
-    const currentYear = new Date().getFullYear();
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    // Check if today is on or after Dec 25th (Month is 0-indexed, so 11 is Dec)
+    const isPastChristmas = now.getMonth() === 11 && now.getDate() >= 25;
+    const endYear = isPastChristmas ? currentYear : currentYear - 1;
+    
     const startYear = 2010; // Adjust this to the earliest year you want to fetch commits for
 
     // Generate date ranges for all Christmas days
     const christmasRanges = Array.from(
-      { length: currentYear - startYear + 1 },
+      { length: endYear - startYear + 1 },
       (_, i) => {
         const year = startYear + i;
         return {
