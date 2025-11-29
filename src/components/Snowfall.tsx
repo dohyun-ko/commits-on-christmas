@@ -1,13 +1,21 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function Snowfall() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
+    // ... rest of the effect
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -76,6 +84,8 @@ export function Snowfall() {
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
+
+  if (!mounted) return null;
 
   return (
     <canvas

@@ -17,7 +17,7 @@ export default function Home() {
     username: string;
     streak: number;
     totalContributions: number;
-    contributions: any[]; // We'll fix the type inference by letting it pass through
+    contributions: { date: string; contributionCount: number }[];
     profile: ChristmasProfile;
   } | null>(null);
 
@@ -36,6 +36,8 @@ export default function Home() {
 
       const profile = getChristmasProfile(result.streak, result.totalContributions);
       
+      console.log(result);
+
       setData({
         username,
         streak: result.streak,
