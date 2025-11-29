@@ -15,10 +15,10 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: "Commits on Christmas 🎄",
-  description: "Check your GitHub contribution streak on Christmas! Are you Santa's Helper or The Grinch?",
+  description: "Check your GitHub contribution streak on Christmas! Did you push to prod or touch grass?",
   openGraph: {
     title: "Commits on Christmas 🎄",
-    description: "Check your GitHub contribution streak on Christmas!",
+    description: "Check your GitHub contribution streak on Christmas! Did you push to prod or touch grass?",
     type: "website",
   },
 };

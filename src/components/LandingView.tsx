@@ -38,7 +38,7 @@ export function LandingView({ onSearch, loading, error }: LandingViewProps) {
             Commits on Christmas
           </motion.h1>
           <p className="text-lg text-gray-300 font-light">
-            Are you on the Naughty or Nice list?
+            Did you push to production on Christmas Eve?
           </p>
         </div>
 
@@ -72,7 +72,7 @@ export function LandingView({ onSearch, loading, error }: LandingViewProps) {
             {loading ? (
               <Loader2 className="w-6 h-6 animate-spin" />
             ) : (
-              "Reveal My Fate 🎁"
+              "Run `git status` 🎁"
             )}
           </Button>
         </form>

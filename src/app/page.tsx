@@ -17,6 +17,7 @@ export default function Home() {
     username: string;
     streak: number;
     totalContributions: number;
+    contributions: any[]; // We'll fix the type inference by letting it pass through
     profile: ChristmasProfile;
   } | null>(null);
 
@@ -39,11 +40,12 @@ export default function Home() {
         username,
         streak: result.streak,
         totalContributions: result.totalContributions,
+        contributions: result.contributions,
         profile
       });
       
       setStep("result");
-    } catch (err) {
+    } catch {
       setError("Failed to fetch data. Please try again.");
     } finally {
       setLoading(false);
@@ -90,6 +92,7 @@ export default function Home() {
                   username={data.username}
                   streak={data.streak}
                   totalContributions={data.totalContributions}
+                  contributions={data.contributions}
                   profile={data.profile}
                   onReset={handleReset}
                 />

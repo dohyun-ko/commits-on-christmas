@@ -5,14 +5,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Loader2 } from "lucide-react";
 
 const LOADING_MESSAGES = [
-  "Checking the Naughty or Nice list...",
-  "Feeding the reindeers...",
-  "Counting your commits one by one...",
+  "git blame-ing the Naughty List...",
+  "Optimizing Reindeer pathfinding algorithms...",
+  "Running `git log --since=christmas`...",
   "Asking Linus Torvalds for permission...",
-  "Warming up the servers with hot cocoa...",
-  "Untangling the Christmas lights...",
+  "Compiling snowballs...",
+  "Resolving merge conflicts with Santa...",
   "Debugging the North Pole mainframe...",
-  "Consulting the Ghosts of Commits Past...",
+  "Consulting the Ghosts of Legacy Code...",
 ];
 
 export function LoadingView() {
