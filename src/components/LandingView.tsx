@@ -78,7 +78,7 @@ export function LandingView({ onSearch, loading, error }: LandingViewProps) {
         </form>
 
         <div className="text-xs text-white/30">
-          Open Source &bull; Made with 🎄 by @dohyun-ko
+          Open Source &bull; Made with 🎄 by <a href="https://github.com/dohyun-ko/commits-on-christmas" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">@dohyun-ko</a>
         </div>
       </div>
     </motion.div>
