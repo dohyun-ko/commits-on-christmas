@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Mountains_of_Christmas, Outfit } from "next/font/google";
 import "./globals.css";
 
+import { GoogleAnalytics } from "@next/third-parties/google";
+
 const mountains = Mountains_of_Christmas({
   weight: ["400", "700"],
   subsets: ["latin"],
@@ -32,6 +34,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${mountains.variable} ${outfit.variable} antialiased font-sans bg-[#0b1026] text-white overflow-x-hidden`}>
         {children}
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
       </body>
     </html>
   );
