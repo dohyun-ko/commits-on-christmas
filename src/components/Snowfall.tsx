@@ -83,7 +83,7 @@ export function Snowfall() {
       window.removeEventListener("resize", resize);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [mounted]);
 
   if (!mounted) return null;
 

@@ -37,7 +37,7 @@ export function LandingView({ onSearch, loading, error }: LandingViewProps) {
           >
             Commits on Christmas
           </motion.h1>
-          <p className="text-lg text-gray-300 font-light">
+          <p className="text-md text-gray-300 font-light">
             Did you push to production on Christmas Eve?
           </p>
         </div>

@@ -124,7 +124,7 @@ export function ResultCard({ username, streak, totalContributions, contributions
               <span>Activity History</span>
               <div className="h-px flex-1 bg-white/10" />
             </div>
-            <div className={`grid grid-cols-[repeat(${contributions.length},minmax(12px,1fr))] gap-1`}>
+            <div className={`grid grid-cols-[repeat(15,minmax(12px,1fr))] gap-1`}>
               {[...contributions].reverse().map((day) => (
                 <div 
                   key={day.date} 
