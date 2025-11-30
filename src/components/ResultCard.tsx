@@ -33,13 +33,31 @@ export function ResultCard({ username, streak, totalContributions, contributions
       const file = new File([blob], `christmas-commits-${username}.png`, { type: "image/png" });
 
       if (navigator.share) {
-        await navigator.share({
+        const shareData = {
           title: "My Christmas Commits 🎄",
           text: `I'm a ${profile.title}! Check your Christmas commit streak.`,
-          files: [file],
-        });
+          url: window.location.href,
+        };
+
+        // Check if we can share files
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            ...shareData,
+            files: [file],
+          });
+        } else {
+          // If we can't share files (e.g. desktop or incompatible browser), 
+          // share text/url and download the image
+          await navigator.share(shareData);
+          
+          // Trigger download as fallback for the image
+          const link = document.createElement("a");
+          link.download = `christmas-commits-${username}.png`;
+          link.href = dataUrl;
+          link.click();
+        }
       } else {
-        // Fallback to download
+        // Fallback to download if Web Share API is not supported at all
         const link = document.createElement("a");
         link.download = `christmas-commits-${username}.png`;
         link.href = dataUrl;
