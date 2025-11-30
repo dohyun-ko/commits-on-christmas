@@ -6,40 +6,6 @@ const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN,
 });
 
-const query = `
-query($username: String!, $fromDate: DateTime!, $toDate: DateTime!) {
-  user(login: $username) {
-    contributionsCollection(from: $fromDate, to: $toDate) {
-      contributionCalendar {
-        weeks {
-          contributionDays {
-            date
-            contributionCount
-          }
-        }
-      }
-    }
-  }
-}
-`;
-
-interface ContributionDay {
-  date: string;
-  contributionCount: number;
-}
-
-interface GraphQLResponse {
-  user: {
-    contributionsCollection: {
-      contributionCalendar: {
-        weeks: {
-          contributionDays: ContributionDay[];
-        }[];
-      };
-    };
-  };
-}
-
 // Cached data fetching function
 const getCachedChristmasData = unstable_cache(
   async (username: string) => {
@@ -98,8 +64,8 @@ const getCachedChristmasData = unstable_cache(
 
         const christmasDay =
           userData.contributionsCollection.contributionCalendar.weeks
-            .flatMap((week: any) => week.contributionDays)
-            .find((day: any) => day.date === `${year}-12-25`);
+            .flatMap((week: { contributionDays: { date: string, contributionCount: number }[] }) => week.contributionDays)
+            .find((day: { date: string, contributionCount: number }) => day.date === `${year}-12-25`);
 
         return (
           christmasDay || {
